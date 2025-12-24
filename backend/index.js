@@ -3,11 +3,25 @@ const multer = require("multer");
 const cors = require("cors");
 const docxToPDF = require("docx-pdf");
 const path = require("path");
+const fs = require("fs");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// Ensure uploads and files directories exist
+const uploadsDir = path.join(__dirname, "uploads");
+const filesDir = path.join(__dirname, "files");
+
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+if (!fs.existsSync(filesDir)) {
+    fs.mkdirSync(filesDir, { recursive: true });
+}
 
 app.use(cors());
+app.use(express.json());
 
 // settting up the file storage
 const storage = multer.diskStorage({
